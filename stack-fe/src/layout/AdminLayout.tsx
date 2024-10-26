@@ -1,4 +1,4 @@
-import styles from "@/assets/scss/admin-layout.module.scss";
+import styles from "@/assets/scss/admin.module.scss";
 import useAuth from "@/hooks/useAuth";
 import { MailOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
@@ -27,7 +27,7 @@ const items: MenuProps["items"] = [
       "Product section",
       "g1",
       null,
-      [getItem("Product", "1"), getItem("Logout", "2")],
+      [getItem("Product", "1"), getItem("Orders", "2"), getItem("Logout", "3")],
       "group"
     )
   ])
@@ -42,6 +42,9 @@ const AdminLayout = () => {
         navigate("/admin/product/list");
         break;
       case 2:
+        navigate("/admin/orders/list");
+        break;
+      default:
         if (user) {
           logout();
         }

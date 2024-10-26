@@ -1,4 +1,4 @@
-import styles from "@/assets/scss/admin-layout.module.scss";
+import styles from "@/assets/scss/admin.module.scss";
 import styleProductDetail from "@/assets/scss/product-detail.module.scss";
 import axios from "@/utils/axios";
 import { BackwardFilled } from "@ant-design/icons";
@@ -59,7 +59,7 @@ const ProductFrm = () => {
       if (action && productId && action === "detail") {
         setProductItem({});
         const res: any = await axios.get(`/product/detail/${productId.toString()}`, {
-          headers: { isShowLoading: true }
+          headers: { isShowLoading: false }
         });
         const { statusCode, data } = res.data;
         if (parseInt(statusCode) === 200 || parseInt(statusCode) === 201) {

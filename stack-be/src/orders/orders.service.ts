@@ -19,7 +19,7 @@ export class OrdersService {
           orders_name: prodCreateDto.orders_name,
           orders_mobile: prodCreateDto.orders_mobile,
           orders_date: new Date(),
-          payment_method_id: prodCreateDto.payment_method_id,
+          payment_method_id: parseInt(prodCreateDto.payment_method_id.toString()),
           orders_detail: {
             create: productLst
           }
@@ -31,21 +31,24 @@ export class OrdersService {
   };
   getList = async (query: OrderQuery) => {
     try {
-      let where: any = {};
+      let where = {};
       if (query.orders_name) {
-        where["orders_name"] = query.orders_name;
+        where["orders_name"] = { contains: query.orders_name };
       }
       if (query.orders_mobile) {
-        where["orders_mobile"] = query.orders_mobile;
+        where["orders_mobile"] = { contains: query.orders_mobile };
       }
-      if (query.orders_date) {
-        where["orders_date"] = new Date(query.orders_date);
+      if (query.orders_start_date && query.orders_end_date) {
+        let startDate: Date = new Date(`${query.orders_start_date}`);
+        let endDate: Date = new Date(`${query.orders_end_date}`);
+        where["orders_date"] = { gt: startDate, lt: endDate };
       }
-      const skip: number = (query.page - 1) * query.limit;
+      const skip: number = (parseInt(query.page.toString()) - 1) * parseInt(query.limit.toString());
       const total: number = await this.prisma.orders.count({ where });
       const orders: any = await this.prisma.orders.findMany({
         where,
         select: {
+          id: true,
           orders_name: true,
           orders_mobile: true,
           orders_date: true,
@@ -57,7 +60,7 @@ export class OrdersService {
           }
         },
         skip,
-        take: query.limit ? query.limit : 10
+        take: query.limit ? parseInt(query.limit.toString()) : 10
       });
       return { orders, total };
     } catch (err: any) {

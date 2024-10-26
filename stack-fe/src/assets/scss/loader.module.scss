@@ -1,0 +1,11 @@
+@import "color.scss";
+@import "font.scss";
+.loaderBox {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
