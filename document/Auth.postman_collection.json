@@ -1,0 +1,143 @@
+{
+	"info": {
+		"_postman_id": "2832fda8-e919-4363-a86d-6bbaf557319e",
+		"name": "Auth",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "31572820"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "trong.tran@sstechvn.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "246357",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/auth/login",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"auth",
+						"login"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "trong.tran@sstechvn.com",
+							"disabled": true
+						},
+						{
+							"key": "password",
+							"value": "246357",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get profile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{token}}"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "{{base_url}}/auth/profile"
+			},
+			"response": []
+		},
+		{
+			"name": "Get account",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": "{{base_url}}/auth/account"
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{token}}"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"url": "{{base_url}}/auth/logout"
+			},
+			"response": []
+		},
+		{
+			"name": "Check valid token",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{token}}"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "",
+							"value": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/auth/check-valid-token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0b2tlbiBsb2dpbiIsImlzcyI6ImZyb20gc2VydmVyIiwiaWQiOjEsInVzZXJuYW1lIjoidHJvbmcudHJhbiIsImVtYWlsIjoidHJvbmcudHJhbkBzc3RlY2h2bi5jb20iLCJmdWxsbmFtZSI6IlRy4bqnbiBWxINuIFRy4buNbmciLCJpYXQiOjE3MjkyNTM1NDF9.MjgCXvjvWvTbgOmfiOY2tniOssad83rjPOGqz5PTmOA",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"auth",
+						"check-valid-token"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0b2tlbiBsb2dpbiIsImlzcyI6ImZyb20gc2VydmVyIiwiaWQiOjEsInVzZXJuYW1lIjoidHJvbmcudHJhbiIsImVtYWlsIjoidHJvbmcudHJhbkBzc3RlY2h2bi5jb20iLCJmdWxsbmFtZSI6IlRy4bqnbiBWxINuIFRy4buNbmciLCJpYXQiOjE3MjkyNTM1NDF9.MjgCXvjvWvTbgOmfiOY2tniOssad83rjPOGqz5PTmOA"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

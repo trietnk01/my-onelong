@@ -1,0 +1,81 @@
+{
+	"info": {
+		"_postman_id": "e0e798b4-ea4b-498a-ad1e-b4aebd359a8d",
+		"name": "Users",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "31572820"
+	},
+	"item": [
+		{
+			"name": "Create user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "trong.tran",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "246357",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "trong.tran@sstechvn.com",
+							"type": "text"
+						},
+						{
+							"key": "fullname",
+							"value": "Trần Văn Trọng",
+							"type": "text"
+						}
+					]
+				},
+				"url": "{{base_url}}/user/register"
+			},
+			"response": []
+		},
+		{
+			"name": "Get user by username param",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{base_url}}/user/admin/employer"
+			},
+			"response": []
+		},
+		{
+			"name": "Get user by username query",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/user?username=admin&role=employee",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"user"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "admin",
+							"description": "e"
+						},
+						{
+							"key": "role",
+							"value": "employee"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
