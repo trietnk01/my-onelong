@@ -40,13 +40,20 @@ model Product {
 
   @@map("product")
 }
-
+model PaymentMethod{
+  id Int @id @default(autoincrement())
+  title String @unique
+  orders Orders[]
+  @@map("payment_method")
+}
 model Orders {
   id           Int            @id @default(autoincrement())
   orders_name   String
   orders_mobile String
-  orders_date   DateTime
+  orders_date   DateTime  
   orders_detail OrdersDetail[]
+  payment_method_id Int
+  payment_method PaymentMethod @relation(fields: [payment_method_id],references: [id])
 
   @@map("orders")
 }
@@ -59,7 +66,7 @@ model OrdersDetail {
   orders_product_image String?
   orders_price         Float
   orders_quantity      Int
-  orders              Orders  @relation(fields: [orders_id], references: [id])
+  orders Orders @relation(fields: [orders_id],references: [id])
   product             Product @relation(fields: [product_id], references: [id])
 
   @@map("orders_detail")

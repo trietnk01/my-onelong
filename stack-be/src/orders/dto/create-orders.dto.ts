@@ -7,5 +7,8 @@ export class CreateOrdersDto {
   orders_mobile: string;
 
   @IsNotEmpty()
+  payment_method_id: number;
+
+  @IsNotEmpty()
   orders_product_json: string;
 }
