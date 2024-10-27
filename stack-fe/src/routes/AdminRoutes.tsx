@@ -8,7 +8,7 @@ const ProductList = Loadable(
     const promi: any = new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve(import("@/pages/admin/product/ProductList"));
-      }, 2000);
+      }, 1000);
     });
     const val: any = await promi;
     return val;
@@ -19,7 +19,7 @@ const ProductFrm = Loadable(
     const promi: any = new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve(import("@/pages/admin/product/ProductFrm"));
-      }, 2000);
+      }, 1000);
     });
     const val = await promi;
     return val;
@@ -30,7 +30,18 @@ const OrdersList = Loadable(
     const promi: any = new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve(import("@/pages/admin/orders/OrdersList"));
-      }, 2000);
+      }, 1000);
+    });
+    const val: any = await promi;
+    return val;
+  })
+);
+const OrdersFrm = Loadable(
+  React.lazy(async () => {
+    const promi: any = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(import("@/pages/admin/orders/OrdersFrm"));
+      }, 1000);
     });
     const val: any = await promi;
     return val;
@@ -67,6 +78,10 @@ const AdminRoutes = {
         {
           path: "list",
           element: <OrdersList />
+        },
+        {
+          path: "form/:action/:orderId",
+          element: <OrdersFrm />
         }
       ]
     }

@@ -14,8 +14,17 @@ export class OrdersService {
     try {
       const d = new Date();
       const productLst: any[] = JSON.parse(prodCreateDto.orders_product_json);
+      let sku: string = "";
+      const characters = "123456789";
+      const charactersLength = characters.length;
+      let counter = 0;
+      while (counter < length) {
+        sku += characters.charAt(Math.floor(Math.random() * charactersLength));
+        counter += 1;
+      }
       return this.prisma.orders.create({
         data: {
+          orders_sku: sku,
           orders_name: prodCreateDto.orders_name,
           orders_mobile: prodCreateDto.orders_mobile,
           orders_date: new Date(),
@@ -32,6 +41,9 @@ export class OrdersService {
   getList = async (query: OrderQuery) => {
     try {
       let where = {};
+      if (query.orders_sku) {
+        where["orders_sku"] = { contains: query.orders_sku };
+      }
       if (query.orders_name) {
         where["orders_name"] = { contains: query.orders_name };
       }
@@ -49,6 +61,7 @@ export class OrdersService {
         where,
         select: {
           id: true,
+          orders_sku: true,
           orders_name: true,
           orders_mobile: true,
           orders_date: true,
@@ -73,6 +86,7 @@ export class OrdersService {
         where: { id },
         select: {
           id: true,
+          orders_sku: true,
           orders_date: true,
           orders_detail: {
             select: {

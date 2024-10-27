@@ -1,20 +1,27 @@
-import styles from "@/assets/scss/admin.module.scss";
 import axios from "@/utils/axios";
-import { Button, GetProp, Input, Select, Space, Table, TableProps } from "antd";
+import type { DatePickerProps, GetProps } from "antd";
+import { Button, DatePicker, GetProp, Input, Space, Table, TableProps } from "antd";
 import { produce } from "immer";
-import ldash from "lodash";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import styles from "@/assets/scss/admin.module.scss";
 type TablePaginationConfig = Exclude<GetProp<TableProps, "pagination">, boolean>;
 interface IOrders {
   key: string;
   id: number;
+  orders_sku: string;
   orders_name: string;
   orders_mobile: string;
   orders_date: string;
 }
-
+interface IFilter {
+  ordersSku?: string;
+  ordersName?: string;
+  ordersMobile?: string;
+  ordersStartDate?: string;
+  ordersEndDate?: string;
+}
 interface TableParams {
   pagination?: TablePaginationConfig;
   sortField?: string;
@@ -32,14 +39,11 @@ const Toast = Swal.mixin({
     toast.onmouseleave = Swal.resumeTimer;
   }
 });
-
-const TIMEOUT_DEBOUNCE = 30;
 const OrdersList = () => {
   const navigate = useNavigate();
   const [ordersData, setOrdersData] = React.useState<IOrders[]>([]);
   const [loading, setLoading] = React.useState(false);
-  const [ordersName, setOrdersName] = React.useState<string>("");
-  const [ordersMobile, setOrdersMobile] = React.useState<string>("");
+  const [filter, setFilter] = React.useState<IFilter>({});
   const [tableParams, setTableParams] = React.useState<TableParams>({
     pagination: {
       current: 1,
@@ -47,6 +51,12 @@ const OrdersList = () => {
     }
   });
   const columns: TableProps<IOrders>["columns"] = [
+    {
+      title: "Sku",
+      dataIndex: "orders_sku",
+      key: "orders_sku",
+      render: (text) => text
+    },
     {
       title: "Customer",
       dataIndex: "orders_name",
@@ -84,16 +94,15 @@ const OrdersList = () => {
   const handleDetail = (id: number) => () => {
     navigate(`/admin/orders/form/detail/${id}`);
   };
-  const loadOrdersTable = (
-    ordersName: string,
-    ordersMobile: string,
-    current: string | undefined
-  ) => {
+  const loadOrdersTable = (filter: IFilter, current: string | undefined) => {
     axios
       .get("/orders/list", {
         params: {
-          orders_name: ordersName ? ordersName.trim() : undefined,
-          orders_mobile: ordersMobile ? ordersMobile.trim() : undefined,
+          orders_sku: filter.ordersSku ? filter.ordersSku.trim() : undefined,
+          orders_name: filter.ordersName ? filter.ordersName.trim() : undefined,
+          orders_mobile: filter.ordersMobile ? filter.ordersMobile.trim() : undefined,
+          orders_start_date: filter.ordersStartDate ? filter.ordersStartDate : undefined,
+          orders_end_date: filter.ordersEndDate ? filter.ordersEndDate : undefined,
           page: current ? current.toString() : "1",
           limit: tableParams.pagination?.pageSize?.toString()
         }
@@ -143,17 +152,18 @@ const OrdersList = () => {
   };
   React.useEffect(() => {
     setLoading(true);
-    loadOrdersTable("", "", "1");
+    loadOrdersTable({}, "1");
   }, []);
 
   const handleOrdersNameChange = (e: any) => {
-    setOrdersName(e.target.value.toString());
+    setFilter({ ...filter, ordersName: e.target.value.toString() });
   };
-
   const handleOrdersMobileChange = (e: any) => {
-    setOrdersMobile(e.target.value.toString());
+    setFilter({ ...filter, ordersMobile: e.target.value.toString() });
   };
-
+  const handleOrdersSkuChange = (e: any) => {
+    setFilter({ ...filter, ordersSku: e.target.value.toString() });
+  };
   const handleTableChange: TableProps<IOrders>["onChange"] = (pagination, filters) => {
     setTableParams({
       pagination,
@@ -166,7 +176,17 @@ const OrdersList = () => {
     }
   };
   const handleSearch = () => {
-    loadOrdersTable(ordersName, ordersMobile, tableParams.pagination?.current?.toString());
+    loadOrdersTable(filter, tableParams.pagination?.current?.toString());
+  };
+  type RangePickerProps = GetProps<typeof DatePicker.RangePicker>;
+
+  const { RangePicker } = DatePicker;
+
+  const onOk = (val: DatePickerProps["value"] | RangePickerProps["value"]) => {};
+  const handleChangeRangePicker = (value: any, dateString: any) => {
+    if (dateString && dateString.length > 0) {
+      setFilter({ ...filter, ordersStartDate: dateString[0], ordersEndDate: dateString[1] });
+    }
   };
   return (
     <React.Fragment>
@@ -174,18 +194,31 @@ const OrdersList = () => {
       <div className={styles.controlBox}>
         <div className={styles.filterBox}>
           <Input
+            placeholder="Sku..."
+            size="large"
+            className={styles.searchText}
+            onChange={handleOrdersSkuChange}
+            value={filter.ordersSku ? filter.ordersSku : ""}
+          />
+          <Input
             placeholder="Name..."
             size="large"
             className={styles.searchText}
             onChange={handleOrdersNameChange}
-            value={ordersName}
+            value={filter.ordersName ? filter.ordersName : ""}
           />
           <Input
             placeholder="Mobile..."
             size="large"
             className={styles.searchText}
             onChange={handleOrdersMobileChange}
-            value={ordersMobile}
+            value={filter.ordersMobile ? filter.ordersMobile : ""}
+          />
+          <RangePicker
+            showTime={{ format: "HH:mm" }}
+            format="YYYY-MM-DD HH:mm"
+            onChange={handleChangeRangePicker}
+            onOk={onOk}
           />
           <Button type="primary" htmlType="button" onClick={handleSearch}>
             Search

@@ -1,6 +1,7 @@
 import { IsNotEmpty } from "class-validator";
 
 export class OrderQuery {
+  orders_sku: string;
   orders_name: string;
   orders_mobile: string;
   orders_start_date: Date;

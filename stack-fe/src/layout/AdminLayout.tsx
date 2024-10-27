@@ -57,7 +57,7 @@ const AdminLayout = () => {
       <Menu
         onClick={onClick}
         className={styles.colMenu}
-        defaultSelectedKeys={["1"]}
+        defaultSelectedKeys={["2"]}
         defaultOpenKeys={["sub1"]}
         mode="inline"
         items={items}
