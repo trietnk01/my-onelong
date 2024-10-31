@@ -3,7 +3,7 @@ import { PrismaService } from "@/prisma/prisma.service";
 import { ConfigService } from "@nestjs/config";
 import { CreateOrdersDto } from "./dto/create-orders.dto";
 import { OrderQuery } from "./dto/order-query.dto";
-
+import { produce } from "immer";
 @Injectable()
 export class OrdersService {
   constructor(
@@ -14,6 +14,18 @@ export class OrdersService {
     try {
       const d = new Date();
       const productLst: any[] = JSON.parse(prodCreateDto.orders_product_json);
+      const ordersDetail: any[] = [];
+      if (productLst.length > 0) {
+        for (var i = 0; i < productLst.length; i++) {
+          let ordersDetailtem: any = {
+            product_id: productLst[i].id,
+            orders_product_name: productLst[i].title,
+            orders_price: productLst[i].price,
+            orders_quantity: productLst[i].quantity
+          };
+          ordersDetail.push(ordersDetailtem);
+        }
+      }
       let sku: string = "";
       const characters = "123456789";
       const charactersLength = characters.length;
@@ -27,10 +39,11 @@ export class OrdersService {
           orders_sku: sku,
           orders_name: prodCreateDto.orders_name,
           orders_mobile: prodCreateDto.orders_mobile,
+          orders_address: prodCreateDto.orders_address,
           orders_date: new Date(),
           payment_method_id: parseInt(prodCreateDto.payment_method_id.toString()),
           orders_detail: {
-            create: productLst
+            create: ordersDetail
           }
         }
       });

@@ -52,6 +52,7 @@ model Orders {
   orders_name   String
   orders_mobile String
   orders_date   DateTime  
+  orders_address String @default("")
   orders_detail OrdersDetail[]
   payment_method_id Int
   payment_method PaymentMethod @relation(fields: [payment_method_id],references: [id])
