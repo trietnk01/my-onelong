@@ -10,6 +10,7 @@ import { produce } from "immer";
 interface ICart {
   key: string;
   id: number;
+  sku: string;
   title: string;
   thumbnail: string;
   price: number;
@@ -30,6 +31,11 @@ const CartPage = () => {
     return val;
   });
   const columns: TableProps<ICart>["columns"] = [
+    {
+      title: "Product sku",
+      dataIndex: "sku",
+      key: "sku"
+    },
     {
       title: "Product name",
       dataIndex: "title",

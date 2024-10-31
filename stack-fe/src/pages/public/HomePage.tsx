@@ -8,6 +8,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 interface IProduct {
   id: number;
+  sku: string;
   title: string;
   thumbnail: string;
   price: number;

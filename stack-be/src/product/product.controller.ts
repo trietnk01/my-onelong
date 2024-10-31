@@ -37,10 +37,4 @@ export class ProductController {
   saveProduct(@Body() prodInput: ProductInputDto) {
     return this.prodService.save(prodInput);
   }
-
-  @Post("import")
-  @ResponseMessage("Import product")
-  importProduct() {
-    return this.prodService.import();
-  }
 }

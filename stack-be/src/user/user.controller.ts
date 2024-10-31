@@ -33,4 +33,10 @@ export class UserController {
     const role: string = query.role;
     return { username, role };
   }
+
+  @ResponseMessage("Import data")
+  @Post("import-data")
+  importData() {
+    return this.userService.importData();
+  }
 }

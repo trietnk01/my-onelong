@@ -14,7 +14,7 @@ async function bootstrap() {
   const confService = app.get(ConfigService);
   const reflector = app.get(Reflector);
   const prisma = new PrismaService();
-  const userService = new UserService(prisma);
+  const userService = new UserService(prisma, confService);
   app.useGlobalGuards(new JwtAuthGuard(userService, reflector));
   app.useGlobalInterceptors(new TransformInterceptor(reflector));
   app.useStaticAssets(join(__dirname, "..", "public"));
