@@ -12,16 +12,17 @@ export class OrdersService {
   ) {}
   create = (prodCreateDto: CreateOrdersDto) => {
     try {
-      const d = new Date();
       const productLst: any[] = JSON.parse(prodCreateDto.orders_product_json);
       const ordersDetail: any[] = [];
       if (productLst.length > 0) {
         for (var i = 0; i < productLst.length; i++) {
           let ordersDetailtem: any = {
-            product_id: productLst[i].id,
-            orders_product_name: productLst[i].title,
-            orders_price: productLst[i].price,
-            orders_quantity: productLst[i].quantity
+            product_id: productLst[i].product_id,
+            orders_product_sku: productLst[i].orders_product_sku,
+            orders_product_name: productLst[i].orders_product_name,
+            orders_product_image: productLst[i].orders_product_image,
+            orders_price: productLst[i].orders_price,
+            orders_quantity: productLst[i].orders_quantity
           };
           ordersDetail.push(ordersDetailtem);
         }
@@ -103,6 +104,7 @@ export class OrdersService {
           orders_date: true,
           orders_detail: {
             select: {
+              orders_product_sku: true,
               orders_product_name: true,
               orders_product_image: true,
               orders_price: true,

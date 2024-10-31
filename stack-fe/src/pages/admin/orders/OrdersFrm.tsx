@@ -20,6 +20,7 @@ interface IOrder {
 interface ICart {
   id: number;
   key: string;
+  orders_product_sku: string;
   orders_product_name: string;
   orders_price: number;
   orders_quantity: number;
@@ -99,6 +100,11 @@ const OrdersFrm = () => {
     return val;
   });
   const columns: TableProps<ICart>["columns"] = [
+    {
+      title: "Product sku",
+      dataIndex: "orders_product_sku",
+      key: "orders_product_sku"
+    },
     {
       title: "Product name",
       dataIndex: "orders_product_name",

@@ -1,14 +1,14 @@
-import ldash from "lodash";
 import styles from "@/assets/scss/frontpage.module.scss";
 import { formatCurrency } from "@/utilities";
 import axiosServices from "@/utils/axios";
-import { Button, Flex, Image, Pagination } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
+import { Button, Flex, Image, Pagination, Spin } from "antd";
 import React from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
-import Item from "antd/es/list/Item";
 interface IProduct {
   id: number;
+  sku: string;
   title: string;
   thumbnail: string;
   price: number;
@@ -33,6 +33,8 @@ const HomePage = () => {
   const navigate = useNavigate();
   const [products, setProducts] = React.useState<IProduct[]>([]);
   const [productTotal, setProductTotal] = React.useState<number>(0);
+  const [productId, setProductId] = React.useState<number>(0);
+  const [loadingAddCart, setLoadingAddCart] = React.useState<boolean>(false);
   React.useEffect(() => {
     const loadProducts = async (categorySlug: string | undefined, currentPage: any) => {
       try {
@@ -95,16 +97,36 @@ const HomePage = () => {
         product.amount = product.price;
         cartData.push(product);
       }
-      console.log("cartData = ", cartData);
       sessionStorage.setItem("cart", JSON.stringify(cartData));
+      setProductId(id);
+      Toast.fire({
+        icon: "success",
+        title: "Product is add cart successfully",
+        timer: 3000
+      });
     }
   };
+  React.useEffect(() => {
+    setTimeout(() => {
+      setProductId(0);
+    }, 3000);
+  }, [productId]);
   return (
     <div>
       <div className={styles.productRows}>
         {products.length > 0 ? (
           <React.Fragment>
             {products.map((item: IProduct, idx: number) => {
+              let btnControl: React.ReactNode = <React.Fragment></React.Fragment>;
+              if (item.id === productId) {
+                btnControl = <Spin indicator={<LoadingOutlined spin />} />;
+              } else {
+                btnControl = (
+                  <Button htmlType="button" type="primary" onClick={handleAddCart(item.id)}>
+                    Add cart
+                  </Button>
+                );
+              }
               return (
                 <div key={`product-item-${idx}`} className={styles.productBox}>
                   <Flex justify="center">
@@ -112,11 +134,7 @@ const HomePage = () => {
                   </Flex>
                   <h3 className={styles.productName}>{item.title}</h3>
                   <div className={styles.productPrice}>{formatCurrency(item.price)}</div>
-                  <div className={styles.addCart}>
-                    <Button htmlType="button" type="primary" onClick={handleAddCart(item.id)}>
-                      Add cart
-                    </Button>
-                  </div>
+                  <div className={styles.addCart}>{btnControl}</div>
                 </div>
               );
             })}

@@ -15,12 +15,14 @@ type FieldType = {
 interface ICart {
   key: string;
   id: number;
+  sku: string;
   title: string;
   thumbnail: string;
   price: number;
   quantity: number;
   amount: number;
   product_id: number;
+  orders_product_sku: string;
   orders_product_name: string;
   orders_product_image: string;
   orders_price: number;
@@ -67,8 +69,9 @@ const CheckoutPage = () => {
         const cartOrder: ICart[] = produce(cartSession, (draft: ICart[]) => {
           draft.forEach((elmt: ICart) => {
             elmt.product_id = elmt.id;
+            elmt.orders_product_sku = elmt.sku;
             elmt.orders_product_name = elmt.title;
-            elmt.orders_product_image = elmt.orders_product_image;
+            elmt.orders_product_image = elmt.thumbnail;
             elmt.orders_price = elmt.price;
             elmt.orders_quantity = elmt.quantity;
           });
@@ -86,6 +89,7 @@ const CheckoutPage = () => {
         });
         const { statusCode, message } = res.data;
         if (parseInt(statusCode) === 200 || parseInt(statusCode) === 201) {
+          sessionStorage.removeItem("cart");
           Toast.fire({
             icon: "success",
             title: "Create order successfully"

@@ -1,4 +1,5 @@
 import styles from "@/assets/scss/admin.module.scss";
+import axiosServices from "@/utils/axios";
 import axios from "@/utils/axios";
 import { Button, GetProp, Input, Select, Space, Table, TableProps } from "antd";
 import { produce } from "immer";
@@ -143,7 +144,7 @@ const ProductList = () => {
       .catch((err: any) => {
         Toast.fire({
           icon: "error",
-          title: err.message
+          title: err.statusText
         });
       });
   };
@@ -201,7 +202,27 @@ const ProductList = () => {
       setTableParams(nextState);
     }
   };
-
+  const handleImportData = async () => {
+    try {
+      const res: any = await axiosServices.post(
+        "/user/import-data",
+        {},
+        { headers: { isShowLoading: true } }
+      );
+      const { statusCode } = res.data;
+      if (parseInt(statusCode) === 200 || parseInt(statusCode) === 201) {
+        Toast.fire({
+          icon: "success",
+          title: "Import data successfully"
+        });
+      }
+    } catch (err: any) {
+      Toast.fire({
+        icon: "error",
+        title: err.statusText
+      });
+    }
+  };
   return (
     <React.Fragment>
       <h2 className={styles.titleHeading}>Products</h2>
@@ -221,6 +242,9 @@ const ProductList = () => {
             options={categoryProductData}
             onChange={handleCategoryProductChange}
           />
+          <Button htmlType="button" type="primary" onClick={handleImportData}>
+            Import data
+          </Button>
         </div>
       </div>
       <Table

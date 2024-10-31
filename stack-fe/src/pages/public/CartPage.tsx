@@ -1,15 +1,16 @@
-import React from "react";
-import type { InputNumberProps } from "antd";
-import ldash from "lodash";
-import { Button, Flex, Input, InputNumber, Space, Spin, Table, Tag } from "antd";
-import type { TableProps } from "antd";
-import { formatCurrency } from "@/utilities";
 import styles from "@/assets/scss/frontpage.module.scss";
-import { useNavigate } from "react-router-dom";
+import { formatCurrency } from "@/utilities";
+import { DeleteOutlined } from "@ant-design/icons";
+import type { TableProps } from "antd";
+import { Button, Flex, Input, Space, Spin, Table, Tooltip } from "antd";
 import { produce } from "immer";
+import ldash from "lodash";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 interface ICart {
   key: string;
   id: number;
+  sku: string;
   title: string;
   thumbnail: string;
   price: number;
@@ -30,6 +31,11 @@ const CartPage = () => {
     return val;
   });
   const columns: TableProps<ICart>["columns"] = [
+    {
+      title: "Product sku",
+      dataIndex: "sku",
+      key: "sku"
+    },
     {
       title: "Product name",
       dataIndex: "title",
@@ -91,8 +97,29 @@ const CartPage = () => {
       render: (_, record) => {
         return formatCurrency(record.amount);
       }
+    },
+    {
+      title: "Action",
+      key: "action",
+      render: (_, record) => {
+        return (
+          <React.Fragment>
+            <Space size="middle">
+              <Tooltip title="Remove item from cart">
+                <Button
+                  type="primary"
+                  shape="circle"
+                  icon={<DeleteOutlined />}
+                  onClick={handleRemoveItem(record.id)}
+                />
+              </Tooltip>
+            </Space>
+          </React.Fragment>
+        );
+      }
     }
   ];
+
   React.useEffect(() => {
     if (sessionStorage.getItem("cart")) {
       const cartData: ICart[] = JSON.parse(sessionStorage.getItem("cart") as string);
@@ -106,24 +133,41 @@ const CartPage = () => {
   const handleQuantityChange =
     (id: number) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const quantity: number = parseInt(e.target.value as string);
-      const cartClone: ICart[] = produce(cart, (draft: ICart[]) => {
-        draft.forEach((elmt: ICart) => {
-          if (elmt.id === id) {
-            elmt.quantity = quantity;
-            elmt.amount = elmt.price * quantity;
-          }
+      let cartClone: ICart[] = [];
+      if (quantity === 0) {
+        cartClone = cart.filter((item: ICart) => item.id != id);
+      } else {
+        cartClone = produce(cart, (draft: ICart[]) => {
+          draft.forEach((elmt: ICart) => {
+            if (elmt.id === id) {
+              elmt.quantity = quantity;
+              elmt.amount = elmt.price * quantity;
+            }
+          });
         });
-      });
+      }
       sessionStorage.setItem("cart", JSON.stringify(cartClone));
       setCart(cartClone);
     };
+  const handleRemoveItem = (id: number) => () => {
+    const nextCartState: ICart[] = cart.filter((item: ICart) => item.id != id);
+    sessionStorage.setItem("cart", JSON.stringify(nextCartState));
+    setCart(nextCartState);
+  };
   const handleCheckout = () => {
     navigate("/checkout");
+  };
+  const handleClearCart = () => {
+    setCart([]);
+    sessionStorage.removeItem("cart");
   };
   return (
     <div>
       <Table<ICart> columns={columns} dataSource={cart} pagination={false} />
-      <Flex justify="right" className={styles.cartControl}>
+      <Flex justify="right" className={styles.cartControl} gap={10}>
+        <Button htmlType="button" type="primary" onClick={handleClearCart}>
+          Clear all
+        </Button>
         <Button htmlType="button" type="primary" onClick={handleCheckout}>
           Checkout
         </Button>

@@ -29,6 +29,7 @@ model CategoryProduct {
 
 model Product {
   id                  Int             @id @default(autoincrement())
+  sku String  
   category_product_id Int
   price               Float
   stock               Int
@@ -48,7 +49,7 @@ model PaymentMethod{
 }
 model Orders {
   id           Int            @id @default(autoincrement())
-  orders_sku String  @default("")
+  orders_sku String  
   orders_name   String
   orders_mobile String
   orders_date   DateTime  
@@ -64,6 +65,7 @@ model OrdersDetail {
   id                  Int     @id @default(autoincrement())
   orders_id            Int
   product_id          Int
+  orders_product_sku String
   orders_product_name  String
   orders_product_image String?
   orders_price         Float

@@ -96,6 +96,7 @@ export class ProductService {
         where,
         select: {
           id: true,
+          sku: true,
           title: true,
           thumbnail: true,
           price: true
@@ -128,32 +129,6 @@ export class ProductService {
     try {
       console.log("prodInput = ", prodInput);
       return {};
-    } catch (err: any) {
-      throw new BadRequestException(err.message);
-    }
-  };
-  import = async () => {
-    try {
-      let productUrl: string = `${this.confService.get<string>("API_PRODUCT")}?limit=99999999&skip=0`;
-      let products: any[] = [];
-      const res: any = await axios.get(productUrl);
-      if (res && res.data && res.data.products && res.data.products.length > 0) {
-        products = res.data.products;
-        for (let i = 0; i < products.length; i++) {
-          let categoryItem: any = await this.categoryService.findByAlias(products[i].category);
-          await this.prisma.product.create({
-            data: {
-              category_product_id: parseInt(categoryItem.id),
-              title: products[i].title,
-              price: parseFloat(products[i].price),
-              stock: parseInt(products[i].stock),
-              thumbnail: products[i].thumbnail,
-              image: products[i].images[0]
-            }
-          });
-        }
-      }
-      return { products, total: parseInt(products.length.toString()) };
     } catch (err: any) {
       throw new BadRequestException(err.message);
     }
