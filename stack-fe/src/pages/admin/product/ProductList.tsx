@@ -1,4 +1,4 @@
-import styles from "@/assets/scss/admin-layout.module.scss";
+import styles from "@/assets/scss/admin.module.scss";
 import axios from "@/utils/axios";
 import { Button, GetProp, Input, Select, Space, Table, TableProps } from "antd";
 import { produce } from "immer";

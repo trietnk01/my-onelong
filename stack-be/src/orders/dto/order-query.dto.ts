@@ -1,9 +1,11 @@
 import { IsNotEmpty } from "class-validator";
 
 export class OrderQuery {
+  orders_sku: string;
   orders_name: string;
   orders_mobile: string;
-  orders_date: Date;
+  orders_start_date: Date;
+  orders_end_date: Date;
   @IsNotEmpty()
   page: number;
   @IsNotEmpty()

@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { CreateCategoryProductDto } from "./dto/create-category_product.dto";
 import { UpdateCategoryProductDto } from "./dto/update-category_product.dto";
 import { PrismaService } from "@/prisma/prisma.service";
@@ -16,6 +16,13 @@ export class CategoryProductService {
   }
   findByAlias = (alias: string) => {
     return this.prisma.categoryProduct.findUnique({ where: { slug: alias } });
+  };
+  getCategories = async () => {
+    try {
+      return this.prisma.categoryProduct.findMany();
+    } catch (err: any) {
+      throw new BadRequestException(err.message);
+    }
   };
   findAll() {
     return `This action returns all categoryProduct`;

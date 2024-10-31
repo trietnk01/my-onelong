@@ -1,12 +1,10 @@
-import { IProduct } from "@/types/product";
+import { CategoryProductService } from "@/category_product/category_product.service";
+import { PrismaService } from "@/prisma/prisma.service";
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { ElasticsearchService } from "@nestjs/elasticsearch";
 import axios from "axios";
 import { ProductInputDto } from "./dto/product-input.dto";
 import { ProductQueryDto } from "./dto/product-query.dto";
-import { PrismaService } from "@/prisma/prisma.service";
-import { CategoryProductService } from "@/category_product/category_product.service";
 
 @Injectable()
 export class ProductService {
@@ -34,7 +32,7 @@ export class ProductService {
   };
   getProducts = async (query: ProductQueryDto) => {
     try {
-      const skip: number = (parseInt(query.page) - 1) * parseInt(query.limit);
+      const skip: number = (query.page - 1) * query.limit;
       let where: any = {};
       if (query.q) {
         where["q"] = query.q;
@@ -79,6 +77,33 @@ export class ProductService {
         }
       }
       return { list, total };
+    } catch (err: any) {
+      throw new BadRequestException(err.message);
+    }
+  };
+  getProductByCategorySlug = async (query: ProductQueryDto) => {
+    try {
+      let where: any = {};
+      if (query.category_product_slug) {
+        where = {
+          ...where,
+          category_product: { slug: query.category_product_slug }
+        };
+      }
+      const skip: number = (parseInt(query.page.toString()) - 1) * parseInt(query.limit.toString());
+      const total: number = await this.prisma.product.count({ where });
+      const products: any = await this.prisma.product.findMany({
+        where,
+        select: {
+          id: true,
+          title: true,
+          thumbnail: true,
+          price: true
+        },
+        skip,
+        take: query.limit ? parseInt(query.limit.toString()) : 10
+      });
+      return { products, total };
     } catch (err: any) {
       throw new BadRequestException(err.message);
     }
