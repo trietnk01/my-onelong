@@ -71,7 +71,7 @@ const CheckoutPage = () => {
             elmt.product_id = elmt.id;
             elmt.orders_product_sku = elmt.sku;
             elmt.orders_product_name = elmt.title;
-            elmt.orders_product_image = elmt.orders_product_image;
+            elmt.orders_product_image = elmt.thumbnail;
             elmt.orders_price = elmt.price;
             elmt.orders_quantity = elmt.quantity;
           });

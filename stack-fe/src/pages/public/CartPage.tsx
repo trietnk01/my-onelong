@@ -1,12 +1,12 @@
-import React from "react";
-import type { InputNumberProps } from "antd";
-import ldash from "lodash";
-import { Button, Flex, Input, InputNumber, Space, Spin, Table, Tag } from "antd";
-import type { TableProps } from "antd";
-import { formatCurrency } from "@/utilities";
 import styles from "@/assets/scss/frontpage.module.scss";
-import { useNavigate } from "react-router-dom";
+import { formatCurrency } from "@/utilities";
+import { DeleteOutlined } from "@ant-design/icons";
+import type { TableProps } from "antd";
+import { Button, Flex, Input, Space, Spin, Table, Tooltip } from "antd";
 import { produce } from "immer";
+import ldash from "lodash";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 interface ICart {
   key: string;
   id: number;
@@ -105,9 +105,14 @@ const CartPage = () => {
         return (
           <React.Fragment>
             <Space size="middle">
-              <Button type="primary" onClick={handleRemoveItem(record.id)}>
-                Remove
-              </Button>
+              <Tooltip title="Remove item from cart">
+                <Button
+                  type="primary"
+                  shape="circle"
+                  icon={<DeleteOutlined />}
+                  onClick={handleRemoveItem(record.id)}
+                />
+              </Tooltip>
             </Space>
           </React.Fragment>
         );
