@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/commo
 import { CategoryProductService } from "./category_product.service";
 import { CreateCategoryProductDto } from "./dto/create-category_product.dto";
 import { UpdateCategoryProductDto } from "./dto/update-category_product.dto";
+import { Public, ResponseMessage } from "@/decorator/customize";
 
 @Controller("category-product")
 export class CategoryProductController {
@@ -12,11 +13,16 @@ export class CategoryProductController {
     return this.categoryProductService.create(createCategoryProductDto);
   }
 
-  @Get("/get-category-by-name")
+  @Get("get-category-by-name")
   findCategoryByName() {
     return this.categoryProductService.findAll();
   }
-
+  @Public()
+  @Get("list")
+  @ResponseMessage("Get category product")
+  getCategories() {
+    return this.categoryProductService.getCategories();
+  }
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.categoryProductService.findOne(+id);

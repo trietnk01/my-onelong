@@ -48,7 +48,7 @@ model PaymentMethod{
 }
 model Orders {
   id           Int            @id @default(autoincrement())
-  orders_sku String @default("")
+  orders_sku String  @default("")
   orders_name   String
   orders_mobile String
   orders_date   DateTime  

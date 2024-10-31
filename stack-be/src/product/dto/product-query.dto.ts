@@ -4,10 +4,11 @@ export class ProductQueryDto {
   q: string;
 
   category_product_id: string;
+  category_product_slug: string;
 
   @IsNotEmpty()
-  page: string;
+  page: number;
 
   @IsNotEmpty()
-  limit: string;
+  limit: number;
 }

@@ -1,29 +1,29 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { produce } from "immer";
-import ldash from "lodash";
-import type { TableProps } from "antd";
 import styles from "@/assets/scss/admin.module.scss";
 import styleProductDetail from "@/assets/scss/product-detail.module.scss";
 import axios from "@/utils/axios";
 import { BackwardFilled } from "@ant-design/icons";
-import { Button, Col, Flex, Row, Space, Spin, Splitter, Table, Tag } from "antd";
+import type { TableProps } from "antd";
+import { Button, Col, Flex, Row, Spin, Splitter, Table } from "antd";
+import { produce } from "immer";
 import React from "react";
 import "react-quill/dist/quill.snow.css";
+import { useNavigate, useParams } from "react-router-dom";
+import { formatCurrency } from "@/utilities";
 interface IOrder {
   ordersSku?: string;
   ordersDate?: string;
   ordersName?: string;
   ordersMobile?: string;
-  ordersAmount?: string;
+  ordersAmount?: number;
   paymentMethod?: string;
 }
 interface ICart {
   id: number;
   key: string;
   orders_product_name: string;
-  orders_price: string;
-  orders_quantity: string;
-  orders_amount: string;
+  orders_price: number;
+  orders_quantity: number;
+  orders_amount: number;
   orders_product_image: string;
 }
 
@@ -68,28 +68,11 @@ const OrdersFrm = () => {
             const nextState: ICart[] = produce(ordersData, (draft: ICart[]) => {
               draft.forEach((elmt: ICart, idx: number) => {
                 elmt.key = (idx + 1).toString();
-                const amount: number =
-                  parseFloat(elmt.orders_price) * parseInt(elmt.orders_quantity);
-                elmt.orders_amount = new Intl.NumberFormat("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                  maximumFractionDigits: 2
-                })
-                  .format(amount)
-                  .replace("$", "");
-                elmt.orders_price = new Intl.NumberFormat("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                  maximumFractionDigits: 2
-                })
-                  .format(parseFloat(elmt.orders_price))
-                  .replace("$", "");
+                elmt.orders_amount = elmt.orders_price * elmt.orders_quantity;
               });
             });
             const totalAmount: number = nextState.reduce((total: number, cartItem: ICart) => {
-              const amount: number =
-                parseFloat(cartItem.orders_price) * parseInt(cartItem.orders_quantity);
-              return total + amount;
+              return total + cartItem.orders_amount;
             }, 0);
             setOrderItem({
               ordersSku: orders_sku,
@@ -97,13 +80,7 @@ const OrdersFrm = () => {
               ordersName: orders_name,
               ordersMobile: orders_mobile,
               paymentMethod: payment_method["title"],
-              ordersAmount: new Intl.NumberFormat("en-US", {
-                style: "currency",
-                currency: "USD",
-                maximumFractionDigits: 2
-              })
-                .format(totalAmount)
-                .replace("$", "")
+              ordersAmount: totalAmount
             });
             setCart(nextState);
           }
@@ -116,7 +93,7 @@ const OrdersFrm = () => {
     const promi: any = new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve(import("@/components/ImageProduct"));
-      }, 3000);
+      }, 2000);
     });
     const val = await promi;
     return val;
@@ -125,13 +102,15 @@ const OrdersFrm = () => {
     {
       title: "Product name",
       dataIndex: "orders_product_name",
-      key: "orders_product_name",
-      render: (text) => <a>{text}</a>
+      key: "orders_product_name"
     },
     {
       title: "Price",
       dataIndex: "orders_price",
-      key: "orders_price"
+      key: "orders_price",
+      render: (_, record) => {
+        return formatCurrency(record.orders_price);
+      }
     },
     {
       title: "Quantity",
@@ -141,7 +120,10 @@ const OrdersFrm = () => {
     {
       title: "Amount",
       dataIndex: "orders_amount",
-      key: "orders_amount"
+      key: "orders_amount",
+      render: (_, record) => {
+        return formatCurrency(record.orders_amount);
+      }
     },
     {
       title: "Image",
@@ -192,7 +174,7 @@ const OrdersFrm = () => {
           </Row>
           <Row style={{ marginTop: 20 }}>
             <Col span={12}>
-              <Table<ICart> columns={columns} dataSource={cart} />
+              <Table<ICart> columns={columns} dataSource={cart} pagination={false} />
             </Col>
             <Col span={12}>
               <Splitter style={{ boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)", padding: 20 }}>
@@ -218,7 +200,9 @@ const OrdersFrm = () => {
                     </Col>
                     <Col span={8}>
                       <div className={styleProductDetail.productLabel}>Amount</div>
-                      <div>{orderItem.ordersAmount ? orderItem.ordersAmount : "0"}</div>
+                      <div>
+                        {orderItem.ordersAmount ? formatCurrency(orderItem.ordersAmount) : "0"}
+                      </div>
                     </Col>
                     <Col span={8}>
                       <div className={styleProductDetail.productLabel}>Order date</div>

@@ -25,6 +25,28 @@ const HomePage = Loadable(
     return val;
   })
 );
+const CartPage = Loadable(
+  React.lazy(async () => {
+    const promi: any = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(import("@/pages/public/CartPage"));
+      }, 2000);
+    });
+    const val = await promi;
+    return val;
+  })
+);
+const CheckoutPage = Loadable(
+  React.lazy(async () => {
+    const promi: any = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(import("@/pages/public/CheckoutPage"));
+      }, 2000);
+    });
+    const val = await promi;
+    return val;
+  })
+);
 // ==============================|| AUTH ROUTING ||============================== //
 
 const PublicRoutes = {
@@ -42,6 +64,18 @@ const PublicRoutes = {
     {
       path: "/",
       element: <HomePage />
+    },
+    {
+      path: ":categorySlug",
+      element: <HomePage />
+    },
+    {
+      path: "cart",
+      element: <CartPage />
+    },
+    {
+      path: "checkout",
+      element: <CheckoutPage />
     }
   ]
 };
