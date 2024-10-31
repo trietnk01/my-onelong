@@ -91,8 +91,24 @@ const CartPage = () => {
       render: (_, record) => {
         return formatCurrency(record.amount);
       }
+    },
+    {
+      title: "Action",
+      key: "action",
+      render: (_, record) => {
+        return (
+          <React.Fragment>
+            <Space size="middle">
+              <Button type="primary" onClick={handleRemoveItem(record.id)}>
+                Remove
+              </Button>
+            </Space>
+          </React.Fragment>
+        );
+      }
     }
   ];
+
   React.useEffect(() => {
     if (sessionStorage.getItem("cart")) {
       const cartData: ICart[] = JSON.parse(sessionStorage.getItem("cart") as string);
@@ -106,24 +122,41 @@ const CartPage = () => {
   const handleQuantityChange =
     (id: number) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const quantity: number = parseInt(e.target.value as string);
-      const cartClone: ICart[] = produce(cart, (draft: ICart[]) => {
-        draft.forEach((elmt: ICart) => {
-          if (elmt.id === id) {
-            elmt.quantity = quantity;
-            elmt.amount = elmt.price * quantity;
-          }
+      let cartClone: ICart[] = [];
+      if (quantity === 0) {
+        cartClone = cart.filter((item: ICart) => item.id != id);
+      } else {
+        cartClone = produce(cart, (draft: ICart[]) => {
+          draft.forEach((elmt: ICart) => {
+            if (elmt.id === id) {
+              elmt.quantity = quantity;
+              elmt.amount = elmt.price * quantity;
+            }
+          });
         });
-      });
+      }
       sessionStorage.setItem("cart", JSON.stringify(cartClone));
       setCart(cartClone);
     };
+  const handleRemoveItem = (id: number) => () => {
+    const nextCartState: ICart[] = cart.filter((item: ICart) => item.id != id);
+    sessionStorage.setItem("cart", JSON.stringify(nextCartState));
+    setCart(nextCartState);
+  };
   const handleCheckout = () => {
     navigate("/checkout");
+  };
+  const handleClearCart = () => {
+    setCart([]);
+    sessionStorage.removeItem("cart");
   };
   return (
     <div>
       <Table<ICart> columns={columns} dataSource={cart} pagination={false} />
-      <Flex justify="right" className={styles.cartControl}>
+      <Flex justify="right" className={styles.cartControl} gap={10}>
+        <Button htmlType="button" type="primary" onClick={handleClearCart}>
+          Clear all
+        </Button>
         <Button htmlType="button" type="primary" onClick={handleCheckout}>
           Checkout
         </Button>

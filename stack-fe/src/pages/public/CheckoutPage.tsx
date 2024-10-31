@@ -86,6 +86,7 @@ const CheckoutPage = () => {
         });
         const { statusCode, message } = res.data;
         if (parseInt(statusCode) === 200 || parseInt(statusCode) === 201) {
+          sessionStorage.removeItem("cart");
           Toast.fire({
             icon: "success",
             title: "Create order successfully"
