@@ -99,11 +99,6 @@ const HomePage = () => {
       }
       sessionStorage.setItem("cart", JSON.stringify(cartData));
       setProductId(id);
-      Toast.fire({
-        icon: "success",
-        title: "Product is add cart successfully",
-        timer: 3000
-      });
     }
   };
   React.useEffect(() => {
