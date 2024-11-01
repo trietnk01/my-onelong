@@ -29,49 +29,52 @@ model CategoryProduct {
 
 model Product {
   id                  Int             @id @default(autoincrement())
-  sku String  
+  sku                 String
   category_product_id Int
   price               Float
   stock               Int
   image               String?         @db.Text
   thumbnail           String?         @db.Text
   title               String
-  orders_detail        OrdersDetail[]
+  orders_detail       OrdersDetail[]
   category_product    CategoryProduct @relation(fields: [category_product_id], references: [id])
-
+  
   @@map("product")
 }
-model PaymentMethod{
-  id Int @id @default(autoincrement())
-  title String @unique
+
+model PaymentMethod {
+  id     Int      @id @default(autoincrement())
+  title  String   @unique
   orders Orders[]
+
   @@map("payment_method")
 }
-model Orders {
-  id           Int            @id @default(autoincrement())
-  orders_sku String  
-  orders_name   String
-  orders_mobile String
-  orders_date   DateTime  
-  orders_address String @default("")
-  orders_detail OrdersDetail[]
-  payment_method_id Int
-  payment_method PaymentMethod @relation(fields: [payment_method_id],references: [id])
 
+model Orders {
+  id                Int            @id @default(autoincrement())
+  orders_sku        String
+  orders_name       String
+  orders_mobile     String
+  orders_date       DateTime
+  orders_address    String         @default("")
+  payment_method_id Int
+  payment_method    PaymentMethod  @relation(fields: [payment_method_id], references: [id])
+  orders_detail     OrdersDetail[]
+  
   @@map("orders")
 }
 
 model OrdersDetail {
-  id                  Int     @id @default(autoincrement())
+  id                   Int     @id @default(autoincrement())
   orders_id            Int
-  product_id          Int
-  orders_product_sku String
+  product_id           Int
+  orders_product_sku   String
   orders_product_name  String
   orders_product_image String?
   orders_price         Float
   orders_quantity      Int
-  orders Orders @relation(fields: [orders_id],references: [id])
-  product             Product @relation(fields: [product_id], references: [id])
+  orders               Orders  @relation(fields: [orders_id], references: [id])
+  product              Product @relation(fields: [product_id], references: [id])
 
   @@map("orders_detail")
 }

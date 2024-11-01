@@ -36,7 +36,7 @@ const JWTProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
           dispatch(logoutAction());
         }
       } catch (err: any) {
-        console.log("err = ", err.message);
+        console.log("err = ", err.statusText);
       }
     };
     init();
