@@ -2,6 +2,8 @@
 
 # 2. docker exec -it mysql_onelong_env_local /bin/bash
 
+# 2-1. mysql -u root -p then Enter password : onelong246357
+
 # 3. cd stack-be. Run command npm install
 
 # 4. cd stack-fe. Rund command npm install
