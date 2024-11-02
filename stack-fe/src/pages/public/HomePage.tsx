@@ -104,7 +104,7 @@ const HomePage = () => {
   React.useEffect(() => {
     setTimeout(() => {
       setProductId(0);
-    }, 5000);
+    }, 4000);
   }, [productId]);
   return (
     <div>

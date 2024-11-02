@@ -5,7 +5,7 @@ import { join } from "path";
 import { AuthModule } from "./auth/auth.module";
 import { ProductModule } from "./product/product.module";
 import { UserModule } from "./users/users.module";
-import { CategoryProductModule } from "./category_product/category_product.module";
+import { CategoryProductModule } from "./category-product/category-product.module";
 import { OrdersModule } from "./orders/orders.module";
 import { PaymentMethodModule } from "./payment-method/payment-method.module";
 
