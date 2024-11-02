@@ -61,7 +61,7 @@ const HomePage = () => {
           password,
           fullname
         };
-        let res: any = await axios.post("/user/register", dataSaved, {
+        let res: any = await axios.post("/users/register", dataSaved, {
           headers: { isShowLoading: true, "content-type": "application/json" }
         });
         const { statusCode, message } = res.data;

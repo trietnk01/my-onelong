@@ -2,8 +2,8 @@ import { Public, ResponseMessage } from "@/decorator/customize";
 import { Body, Controller, Get, Param, Post, Query } from "@nestjs/common";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { QueryUserDto } from "./dto/query-user.dto";
-import { UserService } from "./user.service";
-@Controller("user")
+import { UserService } from "./users.service";
+@Controller("users")
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
