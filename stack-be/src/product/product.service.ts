@@ -1,4 +1,4 @@
-import { CategoryProductService } from "@/category_product/category_product.service";
+import { CategoryProductService } from "@/category-product/category-product.service";
 import { PrismaService } from "@/prisma/prisma.service";
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";

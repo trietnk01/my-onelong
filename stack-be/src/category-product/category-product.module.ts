@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
-import { CategoryProductService } from "./category_product.service";
-import { CategoryProductController } from "./category_product.controller";
+import { CategoryProductService } from "./category-product.service";
+import { CategoryProductController } from "./category-product.controller";
 import { PrismaModule } from "@/prisma/prisma.module";
 
 @Module({

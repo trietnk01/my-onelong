@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
-import { CategoryProductService } from "./category_product.service";
-import { CreateCategoryProductDto } from "./dto/create-category_product.dto";
-import { UpdateCategoryProductDto } from "./dto/update-category_product.dto";
+import { CategoryProductService } from "./category-product.service";
+import { CreateCategoryProductDto } from "./dto/create-category-product.dto";
+import { UpdateCategoryProductDto } from "./dto/update-category-product.dto";
 import { Public, ResponseMessage } from "@/decorator/customize";
 
 @Controller("category-product")
