@@ -1,5 +1,5 @@
 import { IUser } from "@/types/user";
-import { UserService } from "@/user/user.service";
+import { UserService } from "@/users/users.service";
 import { BadRequestException, Injectable, UnauthorizedException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";

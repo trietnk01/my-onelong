@@ -205,7 +205,7 @@ const ProductList = () => {
   const handleImportData = async () => {
     try {
       const res: any = await axiosServices.post(
-        "/user/import-data",
+        "/users/import-data",
         {},
         { headers: { isShowLoading: true } }
       );

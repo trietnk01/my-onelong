@@ -1,20 +1,20 @@
+import { IS_PUBLIC_KEY } from "@/decorator/customize";
+import { PrismaService } from "@/prisma/prisma.service";
 import { IUser } from "@/types/user";
-import { UserService } from "@/user/user.service";
 import {
   BadRequestException,
   ExecutionContext,
   Injectable,
   UnauthorizedException
 } from "@nestjs/common";
+import { Reflector } from "@nestjs/core";
 import { AuthGuard } from "@nestjs/passport";
 import { Request } from "express";
-import { IS_PUBLIC_KEY } from "@/decorator/customize";
-import { Reflector } from "@nestjs/core";
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard("jwt") {
   constructor(
-    private userService: UserService,
+    private prisma: PrismaService,
     private reflector: Reflector
   ) {
     super();
@@ -33,7 +33,9 @@ export class JwtAuthGuard extends AuthGuard("jwt") {
         if (!token) {
           throw new UnauthorizedException();
         }
-        const userRow: IUser = await this.userService.findUserByToken(token);
+        const userRow: IUser | undefined = await this.prisma.user.findFirstOrThrow({
+          where: { token }
+        });
         if (!userRow) {
           throw new UnauthorizedException();
         }
