@@ -1,7 +1,8 @@
-import { CategoryProductService } from "@/category-product/category-product.service";
 import { PrismaService } from "@/prisma/prisma.service";
+import { IUser } from "@/types/user";
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+import { ElasticsearchService } from "@nestjs/elasticsearch";
 import axios from "axios";
 import { ProductInputDto } from "./dto/product-input.dto";
 import { ProductQueryDto } from "./dto/product-query.dto";
@@ -11,7 +12,7 @@ export class ProductService {
   constructor(
     private prisma: PrismaService,
     private confService: ConfigService,
-    private categoryService: CategoryProductService
+    private elastic: ElasticsearchService
   ) {}
   getCategoryProduct = async () => {
     try {
@@ -129,6 +130,19 @@ export class ProductService {
     try {
       console.log("prodInput = ", prodInput);
       return {};
+    } catch (err: any) {
+      throw new BadRequestException(err.message);
+    }
+  };
+  index = () => {
+    try {
+      return this.elastic.index({
+        index: "product",
+        body: {
+          sku: "775774",
+          title: "Abcgh"
+        }
+      });
     } catch (err: any) {
       throw new BadRequestException(err.message);
     }

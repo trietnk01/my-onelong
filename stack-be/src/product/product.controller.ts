@@ -1,4 +1,4 @@
-import { Public, ResponseMessage } from "@/decorator/customize";
+import { CurrentUser, Public, ResponseMessage } from "@/decorator/customize";
 import { Body, Controller, Get, Param, Post, Query } from "@nestjs/common";
 import { ProductInputDto } from "./dto/product-input.dto";
 import { ProductQueryDto } from "./dto/product-query.dto";
@@ -36,5 +36,11 @@ export class ProductController {
   @ResponseMessage("Save product")
   saveProduct(@Body() prodInput: ProductInputDto) {
     return this.prodService.save(prodInput);
+  }
+
+  @Post("index-product")
+  @ResponseMessage("Index product")
+  indexProduct() {
+    return this.prodService.index();
   }
 }
