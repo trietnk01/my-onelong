@@ -11,8 +11,8 @@ import { ProductQueryDto } from "./dto/product-query.dto";
 export class ProductService {
   constructor(
     private prisma: PrismaService,
-    private confService: ConfigService,
-    private elastic: ElasticsearchService
+    private confService: ConfigService
+    /* private elastic: ElasticsearchService */
   ) {}
   getCategoryProduct = async () => {
     try {
@@ -136,13 +136,14 @@ export class ProductService {
   };
   index = () => {
     try {
-      return this.elastic.index({
+      /* return this.elastic.index({
         index: "product",
         body: {
           sku: "775774",
           title: "Abcgh"
         }
-      });
+      }); */
+      return {};
     } catch (err: any) {
       throw new BadRequestException(err.message);
     }

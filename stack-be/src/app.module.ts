@@ -18,25 +18,25 @@ import { ElasticsearchModule } from "@nestjs/elasticsearch";
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, "..", "public")
     }),
-    ElasticsearchModule.registerAsync({
+    /* ElasticsearchModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (confService: ConfigService) => ({
-        node: confService.get<string>("ELASTICSEARCH_NODE"),
+        node: confService.get<string>("ELASTIC_NODE"),
         maxRetries: 10,
         requestTimeout: 60000,
         pingTimeout: 60000,
         sniffOnStart: true,
         headers: {
-          Accept: "application/vnd.elasticsearch+json;compatible-with=7",
-          "Content-Type": "application/vnd.elasticsearch+json;compatible-with=7"
+          Accept: "application/vnd.elasticsearch+json;compatible-with=8",
+          "Content-Type": "application/vnd.elasticsearch+json;compatible-with=8"
         },
         auth: {
-          username: confService.get<string>("ELASTICSEARCH_USERNAME"),
-          password: confService.get<string>("ELASTICSEARCH_PASSWORD")
+          username: confService.get<string>("ELASTIC_USERNAME"),
+          password: confService.get<string>("ELASTIC_PASSWORD")
         }
       }),
       inject: [ConfigService]
-    }),
+    }), */
     UserModule,
     AuthModule,
     ProductModule,
