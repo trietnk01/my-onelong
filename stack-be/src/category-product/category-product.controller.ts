@@ -12,29 +12,10 @@ export class CategoryProductController {
   create(@Body() createCategoryProductDto: CreateCategoryProductDto) {
     return this.categoryProductService.create(createCategoryProductDto);
   }
-
-  @Get("get-category-by-name")
-  findCategoryByName() {
-    return this.categoryProductService.findAll();
-  }
   @Public()
   @Get("list")
   @ResponseMessage("Get category product")
   getCategories() {
     return this.categoryProductService.getCategories();
-  }
-  @Get(":id")
-  findOne(@Param("id") id: string) {
-    return this.categoryProductService.findOne(+id);
-  }
-
-  @Patch(":id")
-  update(@Param("id") id: string, @Body() updateCategoryProductDto: UpdateCategoryProductDto) {
-    return this.categoryProductService.update(+id, updateCategoryProductDto);
-  }
-
-  @Delete(":id")
-  remove(@Param("id") id: string) {
-    return this.categoryProductService.remove(+id);
   }
 }

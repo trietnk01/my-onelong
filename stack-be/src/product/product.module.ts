@@ -1,12 +1,12 @@
-import { Module } from "@nestjs/common";
-import { ProductService } from "./product.service";
-import { ProductController } from "./product.controller";
-import { SeachModule } from "@/search/search.module";
-import { PrismaModule } from "@/prisma/prisma.module";
 import { CategoryProductModule } from "@/category-product/category-product.module";
+import { PrismaModule } from "@/prisma/prisma.module";
+import { Module } from "@nestjs/common";
+import { ElasticsearchModule } from "@nestjs/elasticsearch";
+import { ProductController } from "./product.controller";
+import { ProductService } from "./product.service";
 
 @Module({
-  imports: [SeachModule, PrismaModule, CategoryProductModule],
+  imports: [ElasticsearchModule, PrismaModule, CategoryProductModule],
   controllers: [ProductController],
   providers: [ProductService]
 })
